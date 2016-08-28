@@ -18,17 +18,17 @@ import robocode.BulletHitEvent;
 import robocode.RoundEndedEvent;
 import robocode.BulletHitBulletEvent;
 
-/*  JukBot v9.0.6 (Updated 28 August 2016) 
+/*  JukBot v9.0.7 (Updated 28 August 2016) 
 	Maximum life: at 5871593 nanoseconds per turn.
 	Designed: for Single Bot Mode and Multiple Bots Mode.
 	Status: IN BETA TESTING, (NOT A FINAL BOT !!)
 	Changes log: 
-				-Fix adjust radar turn, gun independent to robot turn (set to True) 
-				-Add overheat protection 
-				-Add bearing from gun for more precise fire and probability accurate.
+				- Add Bullet sheild protection feature
+				- Reverse direction attack
+				- Add bearing from gun for more precise fire and probability accurate.
 	Future release: 
 				- Analysis enemy heuristics
-				- Add Bullet sheild feature
+				- Improve Bullet sheild protection 
 				- Calculate miss bullet probability
 */
 
@@ -173,10 +173,10 @@ public void onHitRobot(HitRobotEvent e) {
 	 // IN DEVELOPMENT AI
 	}
 
-	public void onHitByBullet(HitByBulletEvent e) {
+public void onHitByBullet(HitByBulletEvent e) {
 		hit++;
 		System.out.println("!!WARNING!! " + robot + " is hit by " + e.getName() + " (Hit Count: " + hit + " Energy: " + getEnergy() + ")");
-	setAhead(100*moveDirection);//move forward
+	    setAhead(100*moveDirection);//move forward
 	 // IN DEVELOPMENT AI
 }
 
@@ -193,6 +193,11 @@ public void onBulletHit(BulletHitEvent event) {
 
 public void onBulletHitBullet(BulletHitBulletEvent e) {
 	System.out.println("!!WELL DONE!! " +robot + " bullet's hit a bullet fired by " + e.getBullet().getName() + "!!");
+	moveDirection=-moveDirection;
+	setAhead(100*moveDirection);//move forward 
+	if(getGunHeat() ==0) {
+		setFire(3); //not dynamic fire
+	}
    // IN DEVELOPMENT AI
 } 
 
